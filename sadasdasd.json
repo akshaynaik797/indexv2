@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "testgmailapi-295507",
+  "private_key_id": "85798208be36718ecf9fb8eac2934314dc523687",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQDIudMQSQru46+e\nZoLilBK6pKgZTV7j0OXsfF2XO7SC+qfvLG3p4FFjXIKx818zguxJBXEvNCw6xvWu\n45/ISpBa5kBXjD+J6dZpYGSQw2Gd+0wImVPWZqDLIiwZ6X3dsvemE1ZdeWigF2yL\n+WSuLA8SOkMsHstCC46ezbngoIdRw//zhX25SiVxG3xsvCz4njr3F+s576Slj/RE\nyiPUIC/PcVkPm13cXUS27Mcl11CPFrxwi0bMpxmAsn1F/bzaGnuoRiVdmqRtbGBt\nj+pZEgGpn8vg2k0z3H486NhkcVWsL6gSuCaNNDqy/iDeTReQu/Ur2n5vgOVY8G2P\nho4PM71HAgMBAAECggEAFK1pK98iZFvfHlWtZlLeSmImO5Oyp+GVSz2/1Gb0SvPa\n8zKj+04+LsVRD1d590/62vDXvobvhs8ycDrcSGE/VVCCe0z5dKcP4oNpXgJKiYrh\nbmyrwW/etjObJcDdqZtt6H/1yyOedAjFsqD/zp4U9V88G+JA365aGaDUD5WUgFxz\nhUiszYmkULWxjbfQTZ3oUF0061xjDO7DP08uu58gJxdJgJTX/uyYxG54gRY08G2g\nZV1pF++mKuV7q6CkP5PYH8LwfCCLzsDNMhB+h/ajzfP81URHdmPaA/Gu+Nyb/nn0\n9reb2IvVruD5m5I8Ot1ufPOtEHmu/qBdkyiIB4jrkQKBgQDyZQdEYPwcAZGVmF1T\nXChIiqpvb61obgfrhT52n3RwhpL78zhOII2sxT96414Emo2L1ENrrxcnea1LGWEK\n+D8FQyAWOTg6839q5s2KqYSflUoNHe+kxiv3YPR00HKV5Q0/h2YCuGV+TUm4ys3/\nYq8al2cqK/W+JLyVOKOddmbiMQKBgQDT/g6cgjhw54JIVHeZEzW7rtYa4NP+jENS\n4loYbIM1Eq2Dgl1DYEBGvRe70pWvR6cVVYlriyV5/e7SLvn+bUVJrYcsiI9WGC2Q\nIPa+PUNcVMSQ+gwRn39Uenmw/r9pCLfDLXR8d997NK592+zdrduO0kcz+eAze/7Z\n+BJGaYeA9wKBgQDk73qfoKI8qVahXdi3RNFfQmia+3VirpmYXq6SRyQoq1Hj2OIT\nGDf3OA0uudQwsPCDYqWS7ToHNKrxxTScsb6D79Q8aSqssxJjGz6Cen0iZFQec2nF\nzM31xYLdWYr/++g5Wl6ErzhcxA6fFBzf2orbqKftcruVLQlYPrh5njyp4QKBgQC8\npci63eb8EgiN9Ry4y691ZRCCuq/sRUVj7KngMjBQel6OOORloLGSQZNtQOiTImA9\nS/EOErU26hIsWEF/eB3AgvtXVe633qwtJihtAnd/IrAJk3pJ9HWK57KDHy+WeHuO\n5FRUrxfgu/DLb3pJiv1nCxjx19r79cvEjE02+5Hp4QKBgDkE+vXmpFVczDQ17wJL\nD9TwGeVwK30kkt4hXtu32dAJC+f9fBsAUMvrUVn3n7ofFT29hLkiargyY8nGjwYi\nIKBBzurINFp/Q6wiFbCwj0gZER2Z9SPn8QMszHoyiSesK9KNldd6jIU70/6I3AKt\nzqLsdU0r9ynzk9IbT94GurPi\n-----END PRIVATE KEY-----\n",
+  "client_email": "full-control-to-gmail@testgmailapi-295507.iam.gserviceaccount.com",
+  "client_id": "106939005559107864463",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/full-control-to-gmail%40testgmailapi-295507.iam.gserviceaccount.com"
+}
