@@ -2,23 +2,34 @@ import pickle
 import base64
 import os.path
 from random import randint
-from datetime import datetime
+from datetime import datetime, timedelta
+from time import sleep
+
 from pytz import timezone, utc
 
-
+import mysql.connector
 from googleapiclient.discovery import build
 from google_auth_oauthlib.flow import InstalledAppFlow
 from google.auth.transport.requests import Request
 import pdfkit
 
-config = pdfkit.configuration(wkhtmltopdf='/usr/bin/wkhtmltopdf')
+if not os.path.exists('new_attach'):
+    os.mkdir('new_attach')
 
+conn_data = {'host':"iclaimdev.caq5osti8c47.ap-south-1.rds.amazonaws.com",
+        'user':"admin",
+        'password':"Welcome1!",
+        'database':'python'}
+
+config = pdfkit.configuration(wkhtmltopdf='/usr/bin/wkhtmltopdf')
 
 # If modifying these scopes, delete the file token.pickle.
 SCOPES = ['https://www.googleapis.com/auth/gmail.readonly']
 
+
 def file_no(len):
-    return str(randint((10**(len-1)), 10**len)) + '_'
+    return str(randint((10 ** (len - 1)), 10 ** len)) + '_'
+
 
 def file_blacklist(filename):
     fp = filename
@@ -26,7 +37,7 @@ def file_blacklist(filename):
     ext = ['.pdf', '.htm', '.html']
     if file_extension not in ext:
         return False
-    if (fp.find('ATT00001') != -1):
+    if fp.find('ATT00001') != -1:
         return False
     if (fp.find('MDI') != -1) and (fp.find('Query') == -1):
         return False
@@ -34,7 +45,7 @@ def file_blacklist(filename):
         return False
     if (fp.find('KYC') != -1):
         return False
-    if (fp.find('image') != -1):
+    if fp.find('image') != -1:
         return False
     if (fp.find('DECLARATION') != -1):
         return False
@@ -49,7 +60,10 @@ def file_blacklist(filename):
     if (fp.find('PAYMENT_DETAIL') != -1):
         return False
     return True
-def main():
+
+
+def fetch(after, before):
+    after, before = str(after), str(before)
     """Shows basic usage of the Gmail API.
     Lists the user's Gmail labels.
     """
@@ -73,23 +87,16 @@ def main():
             pickle.dump(creds, token)
 
     service = build('gmail', 'v1', credentials=creds)
-    aid = "ANGjdJ_aENQY_Japg6ghrVxEC_z-SREpdT9HM9JXCBifUdte1xscpyizWaNEHhI32dD_LsN-45pO5sOmRKgYELj6z0mUV-jTv3Cmd8uLngQyh7_LBPNhsbUQv7pNCOj7FhA56rU4D0_Bp27WUa2rD3gUDUnwOhomlrhPQFajOae5WDSLG8IU-r9X9KYYmmzuCKQOZeX1BDqsl4fWBQh-N-OlgpMfMbYnxb8Ef9RK_wGS6oYmIprpA4hvNa7WxFcpz-H-euntnjSgHp5YnRH7ZN8GwKA_PxYtwU2w6dt1KeSI9eFk1HPt3xaEMDi4hvxg0h6s3MpmfCACprBtwrYMGoPO1WEAbLeIMUTzFjr_tuRggGrt6_PJE9LuG-gNxaJdn-MBaviRbFMa8a7yKT0I"
-
-    # attachment = service.users().messages().attachments().get(userId='me', messageId='175bb31880d1ab37',
-    #                                                             id=aid).execute()
-    # data = attachment['data']
-    # with open('a', 'wb') as f:
-    #     f.write(base64.urlsafe_b64decode(data))
-
-
-    q = "before:1600962027 after:1600961487"
-    results = service.users().messages().list(userId='me', labelIds=['INBOX'], q="after:1609749000 before:1609752600").execute()
+    q = f"after:{after} before:{before}"
+    results = service.users().messages().list(userId='me', labelIds=['INBOX'],
+                                              q=q).execute()
     messages = results.get('messages', [])
     if not messages:
         print("No messages found.")
     else:
         print("Message snippets:")
         for message in messages[::-1]:
+            id, subject, date, filename, sender = '', '', '', '', ''
             msg = service.users().messages().get(userId='me', id=message['id']).execute()
             id = msg['id']
             for i in msg['payload']['headers']:
@@ -109,21 +116,20 @@ def main():
                     # except:
                     #     pass
                     date = date.astimezone(timezone('Asia/Kolkata')).replace(tzinfo=None)
-            with open('1.csv', 'a') as fp:
-                print(id, subject,sender, date, sep=', ', file=fp)
             flag = 0
             if 'parts' in msg['payload']:
                 for j in msg['payload']['parts']:
                     if 'attachmentId' in j['body']:
                         filename = j['filename']
                         filename = filename.replace('.PDF', '.pdf')
+                        filename = 'new_attach/' + file_no(4) + filename
                         if file_blacklist(filename):
                             filename = filename.replace(' ', '')
                             a_id = j['body']['attachmentId']
                             attachment = service.users().messages().attachments().get(userId='me', messageId=id,
-                                                                                        id=a_id).execute()
+                                                                                      id=a_id).execute()
                             data = attachment['data']
-                            with open('new_attach/' + file_no(4) + filename, 'wb') as fp:
+                            with open(filename, 'wb') as fp:
                                 fp.write(base64.urlsafe_b64decode(data))
                             print(filename)
                             flag = 1
@@ -143,8 +149,29 @@ def main():
                 print(filename)
                 pdfkit.from_file('new_attach/temp.html', filename, configuration=config)
                 flag = 1
-            if flag == 0:
-                z = 1
+            with mysql.connector.connect(**conn_data) as con:
+                cur = con.cursor()
+                q = "insert into inamdar_mails values (%s, %s, %s, %s, %s, %s, %s)"
+                data = (id, subject, date, str(datetime.now()), os.path.abspath(filename), '', sender)
+                cur.execute(q, data)
+                con.commit()
+
+def run():
+    now = datetime.now()
+    after = int(now.timestamp())
+    before = int((now+timedelta(seconds=1)).timestamp())
+    flag = False
+    while 1:
+        if flag:
+            after = before
+            before = now
+        flag = True
+        print(after, before)
+        #main code here
+        fetch(after, before)
+        now = int(datetime.now().timestamp())
 
 if __name__ == '__main__':
-    main()
+    # after, before = '1609749000', '1609752600'
+    # fetch(after, before)
+    run()
